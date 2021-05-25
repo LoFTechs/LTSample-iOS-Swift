@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Chat-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="Y6W-OH-hqX" customClass="ChatVC" customModule="LTSample_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Chat" largeTitleDisplayMode="never" id="Y8C-Zf-iFd">
+                        <barButtonItem key="rightBarButtonItem" image="IconNewCall_Normal" landscapeImage="IconNewCallLandscape_Normal" id="A01-EP-W1z">
+                            <connections>
+                                <action selector="clickCall" destination="Y6W-OH-hqX" id="q6j-mk-big"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="ERV-0u-XSu" kind="show" identifier="goChatSetting" id="t1h-72-krR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="102.89855072463769" y="46.875"/>
+        </scene>
+        <!--Chat SettingVC-->
+        <scene sceneID="PzK-3T-DA4">
+            <objects>
+                <viewController id="ERV-0u-XSu" customClass="ChatSettingVC" customModule="LTSample_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N3b-wM-yVA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2fu-U1-vDh">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="414"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="2fu-U1-vDh" secondAttribute="height" multiplier="1:1" id="6sq-bh-Ntq"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6sq-bh-Ntq"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6sq-bh-Ntq"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="dDX-MB-Lbt">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ERV-0u-XSu" id="7zA-6F-CrI"/>
+                                    <outlet property="delegate" destination="ERV-0u-XSu" id="NRn-hL-p9g"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LnK-B8-2uQ" customClass="cem">
+                                <rect key="frame" x="342" y="342" width="48" height="48"/>
+                                <color key="backgroundColor" systemColor="secondaryLabelColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="lRT-0Q-JHr"/>
+                                    <constraint firstAttribute="width" secondItem="LnK-B8-2uQ" secondAttribute="height" id="lbx-Gm-aXV"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="camera.fill" catalog="system"/>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MKe-0T-sVs"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                        <constraints>
+                            <constraint firstItem="dDX-MB-Lbt" firstAttribute="top" secondItem="MKe-0T-sVs" secondAttribute="top" id="5Gb-U1-IUT"/>
+                            <constraint firstItem="2fu-U1-vDh" firstAttribute="bottom" secondItem="N3b-wM-yVA" secondAttribute="bottom" id="5U3-EB-Hi6"/>
+                            <constraint firstItem="dDX-MB-Lbt" firstAttribute="width" secondItem="N3b-wM-yVA" secondAttribute="width" multiplier="0.6" id="6y7-88-39c"/>
+                            <constraint firstItem="dDX-MB-Lbt" firstAttribute="leading" secondItem="N3b-wM-yVA" secondAttribute="leading" id="7Mw-he-crs"/>
+                            <constraint firstItem="2fu-U1-vDh" firstAttribute="top" secondItem="MKe-0T-sVs" secondAttribute="top" id="PK4-D0-Yqa"/>
+                            <constraint firstItem="dDX-MB-Lbt" firstAttribute="leading" secondItem="2fu-U1-vDh" secondAttribute="trailing" id="RSs-pc-tLI"/>
+                            <constraint firstAttribute="trailing" secondItem="dDX-MB-Lbt" secondAttribute="trailing" id="frm-r8-z6J"/>
+                            <constraint firstItem="LnK-B8-2uQ" firstAttribute="bottom" secondItem="2fu-U1-vDh" secondAttribute="bottom" constant="-24" id="hab-7V-Fsv"/>
+                            <constraint firstItem="LnK-B8-2uQ" firstAttribute="trailing" secondItem="2fu-U1-vDh" secondAttribute="trailing" constant="-24" id="paE-nI-TUs"/>
+                            <constraint firstItem="2fu-U1-vDh" firstAttribute="leading" secondItem="N3b-wM-yVA" secondAttribute="leading" id="q0i-Ab-aQI"/>
+                            <constraint firstAttribute="trailing" secondItem="2fu-U1-vDh" secondAttribute="trailing" id="s4L-GS-Yr3"/>
+                            <constraint firstAttribute="bottom" secondItem="dDX-MB-Lbt" secondAttribute="bottom" id="xlK-1V-p45"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="5U3-EB-Hi6"/>
+                                <exclude reference="s4L-GS-Yr3"/>
+                                <exclude reference="6y7-88-39c"/>
+                                <exclude reference="7Mw-he-crs"/>
+                                <exclude reference="RSs-pc-tLI"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="5U3-EB-Hi6"/>
+                                <include reference="6y7-88-39c"/>
+                                <include reference="RSs-pc-tLI"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="5U3-EB-Hi6"/>
+                                <include reference="6y7-88-39c"/>
+                                <include reference="RSs-pc-tLI"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="s4L-GS-Yr3"/>
+                                <include reference="7Mw-he-crs"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" id="Hm9-YE-Wpq"/>
+                    <connections>
+                        <outlet property="btnEditAvatar" destination="LnK-B8-2uQ" id="ode-cc-KoJ"/>
+                        <outlet property="imgViewAvatar" destination="2fu-U1-vDh" id="tO1-2P-t0k"/>
+                        <outlet property="listView" destination="dDX-MB-Lbt" id="8Ff-N0-zVf"/>
+                        <segue destination="gPi-SQ-e1r" kind="show" identifier="goChatMemberList" id="ysG-ki-0IP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qAG-Dl-NuS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="891.29464285714278" y="43.478260869565219"/>
+        </scene>
+        <!--Chat Member ListVC-->
+        <scene sceneID="MW8-dZ-uVN">
+            <objects>
+                <viewController id="gPi-SQ-e1r" customClass="ChatMemberListVC" customModule="LTSample_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4fX-8t-6ty">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="R6M-pj-0nU">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="gPi-SQ-e1r" id="SWo-9v-HEt"/>
+                                    <outlet property="delegate" destination="gPi-SQ-e1r" id="ixm-fQ-d8Q"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ocC-jx-SY3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="R6M-pj-0nU" firstAttribute="leading" secondItem="4fX-8t-6ty" secondAttribute="leading" id="7gx-of-DW1"/>
+                            <constraint firstAttribute="trailing" secondItem="R6M-pj-0nU" secondAttribute="trailing" id="B7q-o4-mJk"/>
+                            <constraint firstAttribute="bottom" secondItem="R6M-pj-0nU" secondAttribute="bottom" id="cqd-Nn-uAf"/>
+                            <constraint firstItem="R6M-pj-0nU" firstAttribute="top" secondItem="4fX-8t-6ty" secondAttribute="top" id="smc-VR-dN2"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="5vq-Kt-720"/>
+                    <connections>
+                        <outlet property="listView" destination="R6M-pj-0nU" id="xyj-4j-O6a"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mte-XL-bGc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1721.7391304347827" y="46.875"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="IconNewCallLandscape_Normal" width="24" height="24"/>
+        <image name="IconNewCall_Normal" width="24" height="24"/>
+        <image name="camera.fill" catalog="system" width="128" height="94"/>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

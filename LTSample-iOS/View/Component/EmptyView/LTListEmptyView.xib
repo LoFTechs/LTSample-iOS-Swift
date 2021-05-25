@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="oTH-8V-M19" customClass="LTListEmptyView" customModule="LTSample_iOS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecg-WC-cBy">
+                    <rect key="frame" x="16" y="383" width="382" height="0.0"/>
+                    <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4SY-Bu-G4G">
+                    <rect key="frame" x="16" y="403" width="382" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <color key="textColor" systemColor="systemGrayColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3Ky-R5-Vth">
+                    <rect key="frame" x="0.0" y="423" width="414" height="48"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="tgX-eR-4R7"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="dataSource" destination="oTH-8V-M19" id="11g-1G-Mpn"/>
+                        <outlet property="delegate" destination="oTH-8V-M19" id="rMG-pI-G11"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="EFm-0Q-tk4"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="3Ky-R5-Vth" secondAttribute="trailing" id="60h-Y4-hht"/>
+                <constraint firstItem="3Ky-R5-Vth" firstAttribute="top" secondItem="4SY-Bu-G4G" secondAttribute="bottom" constant="20" id="DFp-Ml-j1E"/>
+                <constraint firstItem="ecg-WC-cBy" firstAttribute="leading" secondItem="EFm-0Q-tk4" secondAttribute="leading" constant="16" id="HaD-pF-ttR"/>
+                <constraint firstItem="EFm-0Q-tk4" firstAttribute="trailing" secondItem="4SY-Bu-G4G" secondAttribute="trailing" constant="16" id="OyJ-ef-TTi"/>
+                <constraint firstItem="3Ky-R5-Vth" firstAttribute="leading" secondItem="oTH-8V-M19" secondAttribute="leading" id="W2y-dh-qOR"/>
+                <constraint firstItem="4SY-Bu-G4G" firstAttribute="top" secondItem="ecg-WC-cBy" secondAttribute="bottom" constant="20" id="bMd-gf-G9g"/>
+                <constraint firstItem="EFm-0Q-tk4" firstAttribute="trailing" secondItem="ecg-WC-cBy" secondAttribute="trailing" constant="16" id="ctZ-ZC-7Cc"/>
+                <constraint firstItem="4SY-Bu-G4G" firstAttribute="centerY" secondItem="oTH-8V-M19" secondAttribute="centerY" multiplier="0.9" id="nw9-57-dOO"/>
+                <constraint firstItem="4SY-Bu-G4G" firstAttribute="leading" secondItem="EFm-0Q-tk4" secondAttribute="leading" constant="16" id="uMr-CE-3KU"/>
+            </constraints>
+            <connections>
+                <outlet property="layoutListHeight" destination="tgX-eR-4R7" id="hjo-47-t2h"/>
+                <outlet property="lblSubTitle" destination="4SY-Bu-G4G" id="Eqm-oq-AzG"/>
+                <outlet property="lblTitle" destination="ecg-WC-cBy" id="CBm-2l-HrL"/>
+                <outlet property="listView" destination="3Ky-R5-Vth" id="wDU-E7-Btq"/>
+            </connections>
+            <point key="canvasLocation" x="-497.10144927536237" y="33.482142857142854"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

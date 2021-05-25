@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Brand_ID</key>
+	<string></string>
+	<key>Auth_API</key>
+	<string></string>
+	<key>LTSDK_API</key>
+	<string></string>
+	<key>LTSDK_TurnKey</key>
+	<string></string>
+	<key>Developer_Account</key>
+	<string></string>
+	<key>Developer_Password</key>
+	<string></string>
+	<key>License_Key</key>
+	<string></string>
+</dict>
+</plist>
