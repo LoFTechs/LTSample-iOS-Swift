@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  LTSample-iOS
+
+  Created by shanezhang on 2021/5/14.
+  
+*/
+
+"APNS_HIDDEN_PERSON_MESSAGE" = "You have a new message.";
