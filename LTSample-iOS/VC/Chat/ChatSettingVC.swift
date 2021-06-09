@@ -82,7 +82,7 @@ class ChatSettingVC: ChatBaseVC {
     
     @IBAction func clickEditAvatar() {
         guard let channel = chatNavigation.channel else { return }
-        editAvatarHelper.clickEditAvatar(avatar: channel.profileImageID.count > 0 ? chatNavigation.avatar : nil)
+        editAvatarHelper.clickEditAvatar(avatar: channel.profileImageFileInfo.isExist ? chatNavigation.avatar : nil)
     }
     
     func clickEditSubject() {

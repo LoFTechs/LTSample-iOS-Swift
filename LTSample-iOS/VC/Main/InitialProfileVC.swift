@@ -155,12 +155,12 @@ extension InitialProfileVC: IMManagerDelegate {
     }
     
     func onSetMyAvatar(_ userProfile: [AnyHashable: Any]?) {
-        guard let _ = userProfile, let profileImageID = userProfile?["profileImageID"] as? String else {
+        guard let _ = userProfile, let profileImageFileInfo = userProfile?["profileImageFileInfo"] else {
             AppUtility.alert("Setting failed")
             endLoading()
             return
         }
-        print("profileImageID = " + profileImageID)
+        print("profileImageFileInfo = \(profileImageFileInfo)")
         setAvatarSuccess = true
         selectedAvatar = nil
         isSelectDeleteAvatar = false

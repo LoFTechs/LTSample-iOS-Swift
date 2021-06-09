@@ -89,7 +89,7 @@ class ProfileManager: DelegatesObject {
                             self.updateNickname(profile.userID, nickname: profile.nickname)
                         }
 
-                        if profile.userID.count > 0 && profile.profileImageID.count > 0 {
+                        if profile.userID.count > 0 && profile.profileImageFileInfo.isExist {
                             self.updateAvatar(profile.userID, fileInfo: profile.profileImageFileInfo)
                         }
 
