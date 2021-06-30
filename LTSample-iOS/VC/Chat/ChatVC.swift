@@ -131,9 +131,22 @@ class ChatVC: MessagesViewController {
     }
     
     @IBAction private func clickCall() {
-        if let chID = chatNavigation.channel?.chID {
+        if let chID = chatNavigation.channel?.chID, let nickname = chatNavigation.subject {
             let userID = FriendManager.getUserID(chID: chID)
-            CallManager.shared.startCall(userID: userID, name: (chatNavigation.subject)!)
+            
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            alert.addAction(UIAlertAction(title: "Voice Call", style: .default) {_ in
+                CallManager.shared.startCall(userID: userID, name: nickname, callMode: LTCallMode.voice)
+            })
+            
+            alert.addAction(UIAlertAction(title: "Video Call", style: .default) {_ in
+                CallManager.shared.startCall(userID: userID, name: nickname, callMode: LTCallMode.video)
+            })
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            
+            present(alert, animated: true, completion: nil)
         }
     }
     

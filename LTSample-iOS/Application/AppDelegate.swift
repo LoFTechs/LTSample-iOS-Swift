@@ -7,7 +7,6 @@
 
 import UIKit
 import PushKit
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,22 +15,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var voipRegistry: PKPushRegistry?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         // Override point for customization after application launch.
         setupAPNS()
         setupSDK()
-        
-        _ = CallVC.shared
-        
         return true
     }
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         
-        if CallVC.shared.window == window || CallStatusBarVC.shared.window == window {
+        if CallVC.shared.window == window || CallStatusBarVC.shared.window == window || VideoCallVC.shared.window == window {
             return .portrait
         }
         
         return .all
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        if let call = VideoCallVC.shared.getCall(), call.options.callMode == LTCallMode.video {
+            call.activateVideoSession()
+        }
     }
     
     func changeLoginVC() {
@@ -46,6 +49,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let vc = rootVC {
             window?.rootViewController = vc
         }
+    }
+    
+    func callRouter(callMode: LTCallMode) -> CallManagerDelegate {
+        if callMode == LTCallMode.video {
+            return VideoCallVC.shared
+        }
+        return CallVC.shared
     }
     
     func resetApp() {

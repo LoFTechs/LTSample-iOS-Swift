@@ -58,7 +58,6 @@ class ChatMemberListVC: ChatBaseVC {
     func chickMemberAction(_ member: LTMemberPrivilege) {
         guard member.userID != UserInfo.userID , let chID = chatNavigation.channel?.chID else { return }
         let nickname = ProfileManager.shared.getUserNickname(member.userID)
-
         let alert = UIAlertController(title: nickname, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Voice Call", style: .default, handler: { _ in
             let nickname = ProfileManager.shared.getUserNickname(member.userID)

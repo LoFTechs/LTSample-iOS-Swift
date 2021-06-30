@@ -25,7 +25,11 @@
 		0A73F6262632B8D800153E6D /* LTListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73F6252632B8D800153E6D /* LTListVC.swift */; };
 		0A75EF3B2637B54900076874 /* CallActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A75EF3A2637B54900076874 /* CallActionView.swift */; };
 		0A75EF3D2637B55400076874 /* CallActionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A75EF3C2637B55400076874 /* CallActionView.xib */; };
+		0A7BEDDD2679AFC5004F02FC /* CallRemoteEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7BEDDC2679AFC5004F02FC /* CallRemoteEventView.swift */; };
 		0A86BE0326491EA3008F32EE /* EditAvatarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A86BE0226491EA3008F32EE /* EditAvatarHelper.swift */; };
+		0AA0E2BD2663719300B84CF5 /* VideoCallVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0E2BB2663719300B84CF5 /* VideoCallVC.swift */; };
+		0AA0E2C12663775900B84CF5 /* VideoCallVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA0E2C02663775900B84CF5 /* VideoCallVC.xib */; };
+		0AA9CA8A2663CF2C00F5CE7F /* PanGestureAnimeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA9CA892663CF2C00F5CE7F /* PanGestureAnimeController.swift */; };
 		0AF6857A26390C100052309F /* CallVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF6857826390C0F0052309F /* CallVC.swift */; };
 		0AF6857B26390C100052309F /* CallVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AF6857926390C100052309F /* CallVC.xib */; };
 		0AF6857F2639320C0052309F /* CallStatusBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF6857D2639320C0052309F /* CallStatusBarVC.swift */; };
@@ -95,6 +99,7 @@
 		37FE4415264453B7008428CE /* ChatSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FE4414264453B7008428CE /* ChatSettingVC.swift */; };
 		37FE441D2652CF09008428CE /* ChatHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FE441C2652CF09008428CE /* ChatHeaderView.swift */; };
 		A1AD00C16F54F62A46A9D68F /* Pods_LTSample_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1ABAC17965AF018D0FDCEC /* Pods_LTSample_iOS.framework */; };
+		FFF1C7432664E78700E3A942 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFF1C7422664E78700E3A942 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,7 +121,11 @@
 		0A73F6252632B8D800153E6D /* LTListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTListVC.swift; sourceTree = "<group>"; };
 		0A75EF3A2637B54900076874 /* CallActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallActionView.swift; sourceTree = "<group>"; };
 		0A75EF3C2637B55400076874 /* CallActionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CallActionView.xib; sourceTree = "<group>"; };
+		0A7BEDDC2679AFC5004F02FC /* CallRemoteEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallRemoteEventView.swift; sourceTree = "<group>"; };
 		0A86BE0226491EA3008F32EE /* EditAvatarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAvatarHelper.swift; sourceTree = "<group>"; };
+		0AA0E2BB2663719300B84CF5 /* VideoCallVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallVC.swift; sourceTree = "<group>"; };
+		0AA0E2C02663775900B84CF5 /* VideoCallVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoCallVC.xib; sourceTree = "<group>"; };
+		0AA9CA892663CF2C00F5CE7F /* PanGestureAnimeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanGestureAnimeController.swift; sourceTree = "<group>"; };
 		0AF6857826390C0F0052309F /* CallVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallVC.swift; sourceTree = "<group>"; };
 		0AF6857926390C100052309F /* CallVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CallVC.xib; sourceTree = "<group>"; };
 		0AF6857D2639320C0052309F /* CallStatusBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStatusBarVC.swift; sourceTree = "<group>"; };
@@ -193,6 +202,7 @@
 		37FE4414264453B7008428CE /* ChatSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSettingVC.swift; sourceTree = "<group>"; };
 		37FE441C2652CF09008428CE /* ChatHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHeaderView.swift; sourceTree = "<group>"; };
 		E2A2E9A53F854E5E86FDA6C3 /* Pods-LTSample-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LTSample-iOS.debug.xcconfig"; path = "Target Support Files/Pods-LTSample-iOS/Pods-LTSample-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		FFF1C7422664E78700E3A942 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				0A86BE0226491EA3008F32EE /* EditAvatarHelper.swift */,
+				0AA9CA892663CF2C00F5CE7F /* PanGestureAnimeController.swift */,
 				15DE4CBA263ABA8100F92149 /* Protocol.swift */,
 			);
 			path = Utils;
@@ -299,8 +310,10 @@
 			isa = PBXGroup;
 			children = (
 				0A75EF3A2637B54900076874 /* CallActionView.swift */,
+				0A7BEDDC2679AFC5004F02FC /* CallRemoteEventView.swift */,
 				0A75EF3C2637B55400076874 /* CallActionView.xib */,
 				0AF6857926390C100052309F /* CallVC.xib */,
+				0AA0E2C02663775900B84CF5 /* VideoCallVC.xib */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -310,6 +323,7 @@
 			children = (
 				0AF6857D2639320C0052309F /* CallStatusBarVC.swift */,
 				0AF6857826390C0F0052309F /* CallVC.swift */,
+				0AA0E2BB2663719300B84CF5 /* VideoCallVC.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -374,6 +388,7 @@
 		1581F5682629423A00677A3D /* LTSample-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				FFF1C7422664E78700E3A942 /* GoogleService-Info.plist */,
 				1581F58B262963BF00677A3D /* LTSample-iOSRelease.entitlements */,
 				1581F58A262963A700677A3D /* LTSample-iOSDebug.entitlements */,
 				1581F57F26295C9600677A3D /* Application */,
@@ -677,6 +692,7 @@
 				0A607467264E2F5000F16DDF /* Localizable.strings in Resources */,
 				15DE4CA62636C1D900F92149 /* LTListEmptyView.xib in Resources */,
 				37FE440A2641B3F5008428CE /* Chat.storyboard in Resources */,
+				0AA0E2C12663775900B84CF5 /* VideoCallVC.xib in Resources */,
 				15DE4C8826326BD600F92149 /* Main.storyboard in Resources */,
 				150EEC23263FA3E600CE31A6 /* CreateGroupChatProfileCell.xib in Resources */,
 				3741277A2638752700E83B5B /* Create.storyboard in Resources */,
@@ -684,6 +700,7 @@
 				0AF6857B26390C100052309F /* CallVC.xib in Resources */,
 				1581F5732629424200677A3D /* Assets.xcassets in Resources */,
 				0A75EF3D2637B55400076874 /* CallActionView.xib in Resources */,
+				FFF1C7432664E78700E3A942 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,6 +757,7 @@
 				15DE4C8E263270EC00F92149 /* CallLogListVC.swift in Sources */,
 				15DE4C94263297CE00F92149 /* GetAuthenVC.swift in Sources */,
 				1581F5952629676200677A3D /* LoginVC.swift in Sources */,
+				0AA0E2BD2663719300B84CF5 /* VideoCallVC.swift in Sources */,
 				0A0A31C22636A94400D2D9C2 /* Date+Format.swift in Sources */,
 				154B3A3C262ED54B0042492F /* AppUtility.swift in Sources */,
 				1581F5C5262D80D100677A3D /* IMManager.swift in Sources */,
@@ -769,6 +787,7 @@
 				15A05F90264137E1004117B5 /* AvatarTitleTVCell.swift in Sources */,
 				15DE4C90263270F800F92149 /* SettingVC.swift in Sources */,
 				37FE44112644400A008428CE /* AvatarTwoLineTitleView.swift in Sources */,
+				0A7BEDDD2679AFC5004F02FC /* CallRemoteEventView.swift in Sources */,
 				0A0A31CE2636BD7D00D2D9C2 /* UIView+Extension.swift in Sources */,
 				0A0A31CC2636BD7D00D2D9C2 /* NotificationCenter+Extension.swift in Sources */,
 				155B9DF826490AD100F02576 /* LTMessageResponse+Extension.swift in Sources */,
@@ -793,6 +812,7 @@
 				155B9E0226492E4200F02576 /* AlertService.swift in Sources */,
 				37FE441D2652CF09008428CE /* ChatHeaderView.swift in Sources */,
 				150EEC21263F9FFB00CE31A6 /* CollectionViewTVCell.swift in Sources */,
+				0AA9CA8A2663CF2C00F5CE7F /* PanGestureAnimeController.swift in Sources */,
 				15DE4C9E2636851600F92149 /* LTVC.swift in Sources */,
 				1581F56A2629423A00677A3D /* AppDelegate.swift in Sources */,
 				0A0A31CF2636BD7D00D2D9C2 /* UILabel+Extension.swift in Sources */,
@@ -960,6 +980,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LTSample-iOS/LTSample-iOSDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 94YF95E34V;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -974,6 +995,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.loftechs.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -994,6 +1016,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LTSample-iOS/LTSample-iOSRelease.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 94YF95E34V;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -1008,6 +1031,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.loftechs.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = LTSample_Release;

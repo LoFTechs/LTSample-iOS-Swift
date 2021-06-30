@@ -119,9 +119,7 @@ class ProfileManager: DelegatesObject {
     
     func updateAvatar(_ fileID: String, fileInfo: LTFileInfo) {
         let storePath = FileManager.default.getCachePath() + "temp_" + fileInfo.fileName
-        
-        guard fileInfo.storageID != "ltsdk" else { return }//TODO:舊圖檔
-        
+                
         let action = LTStorageAction.createDownloadFileAction(with: fileInfo, storePath: storePath)
         
         FileManager.default.removeFile(path: storePath)
