@@ -98,13 +98,13 @@ extension CallLogListVC:  UITableViewDelegate, UITableViewDataSource {
         var callUserInfo:LTCallUserInfo
         if item.callerInfo.userID == UserInfo.userID {
             callUserInfo = item.calleeInfo
-            cell.setState(CallLogState.outgoingCall, callMode: item.callMode)
+            cell.setState(CallLogState.outgoingCall)
         } else if item.billingSecond == 0 {
             callUserInfo = item.callerInfo
-            cell.setState(CallLogState.missCall, callMode: item.callMode)
+            cell.setState(CallLogState.missCall)
         } else {
             callUserInfo = item.callerInfo
-            cell.setState(CallLogState.incomingCall, callMode: item.callMode)
+            cell.setState(CallLogState.incomingCall)
         }
         
         cell.time = Date(timeIntervalSince1970: item.callStartTime / 1000).dateFormat()
@@ -135,13 +135,8 @@ extension CallLogListVC:  UITableViewDelegate, UITableViewDataSource {
         
         let item = items[indexPath.row]
         let userInfo = item.callerInfo.userID == UserInfo.userID ? item.calleeInfo : item.callerInfo
-        let name = ProfileManager.shared.getUserNickname(userInfo.userID) ?? userInfo.semiUID
-        
-        if item.callMode == LTCallMode.video {
-            CallManager.shared.startCall(userID: userInfo.userID, name: name, callMode: LTCallMode.video)
-        } else {
-            CallManager.shared.startCall(userID: userInfo.userID, name: name, callMode: LTCallMode.voice)
-        }
+        let nickname = ProfileManager.shared.getUserNickname(userInfo.userID)
+        CallManager.shared.startCall(userID: userInfo.userID, name: nickname ?? userInfo.semiUID)
     }
     
 }

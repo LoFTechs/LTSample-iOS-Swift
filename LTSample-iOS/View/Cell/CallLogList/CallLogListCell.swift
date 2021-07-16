@@ -96,16 +96,11 @@ class CallLogListCell: AvatarTVCell {
         }
     }
     
-    func setState(_ state: CallLogState, callMode: LTCallMode) {
+    func setState(_ state: CallLogState) {
         let title = NSMutableAttributedString()
         let attachment = NSTextAttachment()
-        if (callMode == LTCallMode.video) {
-            attachment.image = UIImage(named: "SwitchToVideoButton_Normal")?.withTintColor(UIColor.init(displayP3Red: 130.0/255, green: 130.0/255, blue: 130.0/255, alpha: 1))
-            attachment.bounds = CGRect(x: 0, y: -6, width: 25, height: 20)
-        } else {
-            attachment.image = UIImage(named: "InfoVoiceCall")?.withTintColor(UIColor.init(displayP3Red: 130.0/255, green: 130.0/255, blue: 130.0/255, alpha: 1))
-            attachment.bounds = CGRect(x: 0, y: -8, width: 25, height: 25)
-        }
+        attachment.image = UIImage(named: "InfoVoiceCall")?.withTintColor(UIColor.init(displayP3Red: 130.0/255, green: 130.0/255, blue: 130.0/255, alpha: 1))
+        attachment.bounds = CGRect(x: 0, y: -8, width: 25, height: 25)
         title.append(NSAttributedString(attachment: attachment))
         
         switch state {

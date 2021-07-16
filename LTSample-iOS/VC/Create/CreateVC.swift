@@ -111,26 +111,10 @@ extension CreateVC: UITableViewDelegate {
     }
     
     private func outgoingCall(_ friend: Friend) {
-        
-        let nickname = ProfileManager.shared.getUserNickname(friend.userID) ?? friend.userID
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        alert.addAction(UIAlertAction(title: "Voice Call", style: .default) {_ in
-            self.dismiss(animated: true) {
-                CallManager.shared.startCall(userID: friend.userID, name: nickname, callMode: LTCallMode.voice)
-            }
-        })
-        
-        alert.addAction(UIAlertAction(title: "Video Call", style: .default) {_ in
-            self.dismiss(animated: true) {
-                CallManager.shared.startCall(userID: friend.userID, name: nickname, callMode: LTCallMode.video)
-            }
-        })
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        present(alert, animated: true, completion: nil)
-        
+        dismiss(animated: true) {
+            let nickname = ProfileManager.shared.getUserNickname(friend.userID) ?? friend.userID
+            CallManager.shared.startCall(userID: friend.userID, name: nickname)
+        }
     }
 }
 

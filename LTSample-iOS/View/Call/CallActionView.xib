@@ -19,8 +19,8 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="viF-O9-KRY">
                             <rect key="frame" x="133" y="0.0" width="80" height="80"/>
                             <constraints>
+                                <constraint firstAttribute="width" constant="80" id="aHb-Tr-ex5"/>
                                 <constraint firstAttribute="height" constant="80" id="f2I-St-V8k"/>
-                                <constraint firstAttribute="width" secondItem="viF-O9-KRY" secondAttribute="height" multiplier="1:1" id="ou9-ih-EC5"/>
                             </constraints>
                             <state key="normal" image="TabBarChatsActive_Normal"/>
                         </button>
@@ -55,7 +55,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="btnAction" destination="viF-O9-KRY" id="9pQ-Ll-tjQ"/>
-                <outlet property="btnHeightConstraint" destination="f2I-St-V8k" id="SCZ-oJ-GWf"/>
                 <outlet property="lblActionName" destination="QEl-mV-FOl" id="t0p-Kq-LjC"/>
             </connections>
             <point key="canvasLocation" x="-198.55072463768118" y="-126.22767857142857"/>

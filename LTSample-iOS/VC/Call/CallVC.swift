@@ -10,6 +10,7 @@ import UIKit
 class CallVC: UIViewController {
     static let shared: CallVC = {
         let vc = CallVC(nibName: "CallVC", bundle: nil)
+        CallManager.shared.delegate = vc
         return vc
     }()
     
@@ -131,16 +132,32 @@ class CallVC: UIViewController {
             lblName?.text = name
         }
     }
-
+    
     var message: String? {
         didSet {
             lblMessage?.text = message
         }
     }
-
+    
     var avatar: UIImage? {
         didSet {
             imgAvatar?.image = avatar ?? UIImage(systemName: "person.crop.circle")
+        }
+    }
+    
+    var audioRoute: LTAudioRoute? {
+        didSet {
+            if speakerView != nil {
+                speakerView.isActive = (audioRoute == LTAudioRoute.speaker)
+            }
+        }
+    }
+    
+    var isCallMuted: Bool? {
+        didSet {
+            if muteView != nil {
+                muteView.isActive = isCallMuted ?? false
+            }
         }
     }
     
@@ -151,14 +168,18 @@ class CallVC: UIViewController {
     //MARK: - Action
 
     @IBAction func speakerAction() {
-        guard let call = ltCall else { return }
-
+        guard let call = ltCall else {
+            return
+        }
+        
         call.setAudioRoute(speakerView.isActive ? LTAudioRoute.speaker : LTAudioRoute.builtin)
     }
 
     @IBAction func muteAction() {
-        guard let call = ltCall else { return }
-
+        guard let call = ltCall else {
+            return
+        }
+        
         call.setCallMuted(muteView.isActive)
     }
     
@@ -189,7 +210,9 @@ class CallVC: UIViewController {
 
 extension CallVC: CallManagerDelegate {
     func startOutgointCall(_ call: LTCall?, callName: String) {
-        guard let newCall = call else { return }
+        guard let newCall = call else {
+            return
+        }
         
         if ltCall == nil {
             ltCall = newCall
@@ -200,13 +223,11 @@ extension CallVC: CallManagerDelegate {
         }
     }
 
-    func receiveIncomingCall(_ call: LTCall?, callName: String) {
-        guard let newCall = call else { return }
-        
+    func receiveIncomingCall(_ call: LTCall, callName: String) {
         if ltCall == nil {
-            ltCall = newCall
+            ltCall = call
             name = callName
-            avatar = ProfileManager.shared.getUserAvatar(newCall.options.userID)
+            avatar = ProfileManager.shared.getUserAvatar(call.options.userID)
         }
     }
 
@@ -220,20 +241,18 @@ extension CallVC: CallManagerDelegate {
 extension CallVC: LTCallDelegate {
 
     func ltCallStateRegistered(_ call: LTCall) {
-        print("ltCallStateRegistered")
-        guard call == ltCall else { return }
-        message = "Ringing \(name ?? "")..."
+        if call == ltCall {
+            message = "Ringing \(name ?? "")..."
+        }
     }
     
     func ltCallStateConnected(_ call: LTCall) {
-        print("ltCallStateConnected")
-        if (!isShow) {
+        if !statusBarVC.isShow {
             isShow = true
         }
     }
     
     func ltCallStateWarning(_ call: LTCall, statusCode: LTCallStatusCode) {
-        print("ltCallStateRegistered:\(statusCode)")
         if statusCode == LTCallStatusCode.noRecordPermission {
             CallManager.shared.checkMicrophonePrivacy {
                 if $0 {
@@ -245,38 +264,35 @@ extension CallVC: LTCallDelegate {
     
     func ltCallStateTerminated(_ call: LTCall?, statusCode: LTCallStatusCode) {
         if statusCode == LTCallStatusCode.noRecordPermission {
-            CallManager.shared.checkMicrophonePrivacy {_ in
-                self.ltCallStateTerminated(call, statusCode: LTCallStatusCode.hangUp)
-            }
         } else if call == ltCall {
             ltCall = nil
             isShow = false
-            speakerView?.isActive = false
-            muteView?.isActive = false
+            
         }
     }
     
     func ltCallConnectDuration(_ call: LTCall, duration: Int) {
-        guard call == ltCall else { return }
-        
-        message = String(format: "%02i:%02i", duration / 3600 ,duration % 60)
-        if statusBarVC.isShow {
-            statusBarVC.lblMessage.text = message
+        if call == ltCall {
+            message = String(format: "%02i:%02i", duration / 60 ,duration % 60)
+            if statusBarVC.isShow {
+                statusBarVC.lblMessage.text = message
+            }
         }
     }
     
     func ltCallMediaStateChanged(_ call: LTCall, mediaType: LTMediaType) {
-        guard call == ltCall else { return }
-        
-        switch mediaType {
-        case .audioRoute:
-            speakerView?.isActive = (call.getCurrentAudioRoute() == LTAudioRoute.speaker)
-            break
-        case .callMuted:
-            muteView?.isActive = call.isCallMuted()
-
-            break
-        default: break
+        if call == ltCall {
+            switch mediaType {
+            case .audioRoute:
+                if speakerView != nil {
+                    audioRoute = call.getCurrentAudioRoute()
+                }
+                break
+            case .callMuted:
+                isCallMuted = call.isCallMuted()
+                break
+            default: break
+            }
         }
     }
 }

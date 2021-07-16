@@ -10,7 +10,7 @@ import AVFoundation
 
 protocol CallManagerDelegate: LTCallDelegate {
     func startOutgointCall(_ call: LTCall?, callName: String)
-    func receiveIncomingCall(_ call: LTCall?, callName: String)
+    func receiveIncomingCall(_ call: LTCall, callName: String)
     func getCall() -> LTCall?
 }
 
@@ -22,6 +22,7 @@ class CallManager: NSObject {
     
     static let shared = CallManager()
     
+    var delegate: CallManagerDelegate?
     var callLogDelegate: CallLogDelegate?
     
     func initSDK() {
@@ -55,41 +56,35 @@ class CallManager: NSObject {
     }
     
     //MARK: - Call
-    func startCall(accountID: String, callMode: LTCallMode = LTCallMode.voice) {
+    func startCall(accountID: String) {
         LTSDK.getUserStatus(withSemiUIDs: [accountID]) { (rp, userStatuses) in
             if rp.returnCode == .success, let userStatus = userStatuses?.first {
                 if userStatus.userID.count > 0, userStatus.canVOIP {
-                    self.startCall(userID: userStatus.userID, name: accountID, callMode: callMode)
+                    self.startCall(userID: userStatus.userID, name: accountID)
                 } else {
                     print("The accountID is not a user.." )
+                    self.delegate?.startOutgointCall(nil, callName: "")
                 }
             }
         }
     }
     
-    func startCall(userID: String, name: String = "", callMode: LTCallMode = LTCallMode.voice) {
+    func startCall(userID: String, name: String = "") {
         checkMicrophonePrivacy {
             if $0 {
                 DispatchQueue.main.async {
                     let options = LTCallOptions.initWithUserIDBuilder { (builder) in
                         builder.userID = userID
-                        builder.callMode = callMode
                     }
                     
-                    let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                    let vc = appdelegate.callRouter(callMode: callMode)
-                    
-                    if let call = LTSDK.getCallCenterManager()?.startCall(withUserID: UserInfo.userID, options: options, setDelegate: vc) {
+                    if let call = LTSDK.getCallCenterManager()?.startCall(withUserID: UserInfo.userID, options: options, setDelegate: self.delegate!) {
                         
                         let callHandle = CXHandle.init(type: .generic, value: options.callID ?? name)
                         let callkitUpdate = CXCallUpdate()
                         callkitUpdate.remoteHandle = callHandle
                         callkitUpdate.localizedCallerName = name
-                        callkitUpdate.hasVideo = (callMode == LTCallMode.video)
-                        
                         LTCallKitProxy.sharedInstance().startOutgoingCall(call, update: callkitUpdate)
-                        
-                        vc.startOutgointCall(call, callName: name)
+                        self.delegate?.startOutgointCall(call, callName: name)
                     }
                 }
             }
@@ -103,15 +98,12 @@ class CallManager: NSObject {
     }
 
     func checkMicrophonePrivacy(_ finished: ((Bool) -> Void)? = nil) {
-        
-        let privacyTitle = "APP needs access to your phone's microphone"
-        
         switch AVAudioSession.sharedInstance().recordPermission {
         case .granted:
             finished?(true)
         case .denied:
             finished?(false)
-            showSettingsPrivacy(title: privacyTitle)
+            showMicrophonePrivacy()
         case .undetermined:
             AVAudioSession.sharedInstance().requestRecordPermission({ (granted) in
                 DispatchQueue.main.async {
@@ -119,7 +111,7 @@ class CallManager: NSObject {
                         finished?(true)
                     } else {
                         finished?(false)
-                        self.showSettingsPrivacy(title: privacyTitle)
+                        self.showMicrophonePrivacy()
                     }
                 }
             })
@@ -128,36 +120,8 @@ class CallManager: NSObject {
         }
     }
     
-    func checkCameraPrivacy(_ finished: ((Bool) -> Void)? = nil) {
-        let mediaType = AVMediaType.video
-        let privacyTitle = "APP needs access to your phone's camera"
-        switch AVCaptureDevice.authorizationStatus(for: mediaType) {
-        case .authorized:
-            finished?(true)
-        case .denied:
-            finished?(false)
-            showSettingsPrivacy(title: privacyTitle)
-        case .restricted:
-            finished?(false)
-            showSettingsPrivacy(title: privacyTitle)
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: mediaType) { (granted) in
-                DispatchQueue.main.async {
-                    if granted {
-                        finished?(true)
-                    } else {
-                        finished?(false)
-                        self.showSettingsPrivacy(title: privacyTitle)
-                    }
-                }
-            }
-        @unknown default:
-            fatalError()
-        }
-    }
-    
-    func showSettingsPrivacy(title: String) {//
-        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+    func showMicrophonePrivacy() {
+        let alert = UIAlertController(title: "APP needs access to your phone's microphone", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "Settings", style: .default) { _ in
             UIApplication.shared.open(NSURL(string: UIApplication.openSettingsURLString)! as URL, options: [:], completionHandler: nil)
         }
@@ -181,21 +145,16 @@ extension CallManager: LTCallCenterDelegate {
         let callkitUpdate = CXCallUpdate()
         callkitUpdate.remoteHandle = CXHandle.init(type: .generic, value: notificationMessage.callOptions?.callID ?? callName)
         callkitUpdate.localizedCallerName = callName
-        callkitUpdate.hasVideo = (notificationMessage.callOptions?.callMode == LTCallMode.video)
                 
         LTCallKitProxy.sharedInstance().startIncomingCall(with: callkitUpdate) { (error, callUUID) -> LTCallKitDelegate? in
             var callkitDelegate: LTCallKitDelegate? = nil
-            if error == nil, let callOptions = notificationMessage.callOptions {
-                
-                let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                let vc = appdelegate.callRouter(callMode: callOptions.callMode)
-                
-                if let call = LTSDK.getCallCenterManager()?.startCall(with: notificationMessage, setDelegate: vc) {
-                    if vc.getCall() != nil {
+            if error == nil, notificationMessage.callOptions != nil {
+                if let call = LTSDK.getCallCenterManager()?.startCall(with: notificationMessage, setDelegate: self.delegate!) {
+                    if self.delegate?.getCall() != nil {
                         call.busyCall()
                     } else {
                         callkitDelegate = call
-                        vc.receiveIncomingCall(call, callName: callName)
+                        self.delegate?.receiveIncomingCall(call, callName: callName)
                     }
                 }
             }
