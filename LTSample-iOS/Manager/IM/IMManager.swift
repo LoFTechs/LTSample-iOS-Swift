@@ -47,7 +47,6 @@ class IMManager: NSObject {
     private lazy var delegateArray: [IMManagerDelegate] = []
     
     var currentUser: LTUser?
-    var currentChannel: LTChannelResponse?
     var isConnected: Bool {
         get {
             guard let userID = currentUser?.userID, let manager = LTSDK.getIMManager(withUserID: userID) else {
@@ -155,7 +154,9 @@ class IMManager: NSObject {
                 try data.write(to: URL(fileURLWithPath: filePath), options: .atomic)
             } else {
                 isDelete = true
-                try FileManager.default.removeItem(atPath: filePath)
+                if FileManager.default.fileExists(atPath: filePath) {
+                    try FileManager.default.removeItem(atPath: filePath)
+                }
             }
             getCurrentLTIMMnager()?.userHelper.setUserAvatarWithTransID(UUID().uuidString, filePath: isDelete ? "" : filePath, completion: { (response, error) in
                 DispatchQueue.main.async {
@@ -287,7 +288,9 @@ class IMManager: NSObject {
                 try data.write(to: URL(fileURLWithPath: avatarPath), options: .atomic)
             } else {
                 isDelete = true
-                try FileManager.default.removeItem(atPath: avatarPath)
+                if FileManager.default.fileExists(atPath: avatarPath) {
+                    try FileManager.default.removeItem(atPath: avatarPath)
+                }
             }
             
             getCurrentLTIMMnager()?.channelHelper.setChannelAvatarWithTransID(UUID().uuidString, chID: chID, avatarPath: isDelete ? "" : avatarPath, completion: { (response, error) in
@@ -324,11 +327,7 @@ class IMManager: NSObject {
         })
     }
     
-    func setMyChannelNickname(_ nickname: String) {
-        guard let chID = currentChannel?.chID, chID.count > 0 else {
-            print("No chID!")
-            return
-        }
+    func setMyChannelNickname(chID: String,  nickname: String) {
         getCurrentLTIMMnager()?.channelHelper.setChannelUserNicknameWithTransID(UUID().uuidString, chID: chID, nickname: nickname, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
@@ -427,17 +426,17 @@ class IMManager: NSObject {
     }
     
     //MARK: - Send Message
-    func sendTextMessage(_ text: String, completion: ((Bool)->Void)? = nil) {
+    func sendTextMessage(chID: String, chType: LTChannelType, text: String, completion: ((Bool)->Void)? = nil) {
         let message = LTTextMessage()
         message.msgContent = text
-        sendLTMessage(message, completion: completion)
+        sendLTMessage(chID: chID, chType: chType, message: message, completion: completion)
     }
     
-    func sendImageMessage(_ image: UIImage, completion: ((Bool)->Void)? = nil) {
+    func sendImageMessage(chID: String, chType: LTChannelType, image: UIImage, completion: ((Bool)->Void)? = nil) {
         let message = LTImageMessage()
         message.transID = UUID().uuidString
-        message.chID = currentChannel!.chID
-        message.chType = currentChannel!.chType
+        message.chID = chID
+        message.chType = chType
         let uploadImg = image.scaleToLimit(720)
         let path = FileManager.default.getCachePath().appending("\(message.transID).jpg")
         do {
@@ -454,23 +453,23 @@ class IMManager: NSObject {
         }
         message.imagePath = path
         message.thumbnailPath = path
-        sendLTMessage(message, completion: completion)
+        sendLTMessage(chID: chID, chType: chType, message: message, completion: completion)
 
     }
 
-    func sendDocumentMessage(_ filePath: String) {
+    func sendDocumentMessage(chID: String, chType: LTChannelType, filePath: String) {
         let message = LTDocumentMessage()
         message.filePath = filePath
         if filePath.count > 0 {
             let url = URL.init(fileURLWithPath: filePath)
             message.fileName = url.lastPathComponent
         }
-        sendLTMessage(message)
+        sendLTMessage(chID: chID, chType: chType, message: message)
     }
 
-    private func sendLTMessage(_ message: LTMessage, completion: ((Bool)->Void)? = nil) {
-        message.chID = currentChannel!.chID
-        message.chType = currentChannel!.chType
+    private func sendLTMessage(chID: String, chType: LTChannelType, message: LTMessage, completion: ((Bool)->Void)? = nil) {
+        message.chID = chID
+        message.chType = chType
         message.transID = UUID().uuidString
         getCurrentLTIMMnager()?.messageHelper.send(message, completion: { (response, error) in
             DispatchQueue.main.async {
@@ -496,9 +495,6 @@ class IMManager: NSObject {
                 }
                 
                 guard let rp = response else {
-                    return
-                }
-                if rp.chID != self.currentChannel?.chID {
                     return
                 }
                 
@@ -680,9 +676,6 @@ extension IMManager: LTIMManagerDelegate {
     
     func ltimManagerIncomingChannelPreference(_ response: LTChannelPreferenceResponse?, receiver: String) {
         DispatchQueue.main.async {
-            if response?.chID != self.currentChannel?.chID {
-                return
-            }
             for delegate in self.delegateArray {
                 delegate.onChannelChanged()
             }
@@ -691,9 +684,6 @@ extension IMManager: LTIMManagerDelegate {
     
     func ltimManagerIncomingChannelProfile(_ response: LTChannelProfileResponse?, receiver: String) {
         DispatchQueue.main.async {
-            if response?.chID != self.currentChannel?.chID {
-                return
-            }
             for delegate in self.delegateArray {
                 delegate.onChannelProfileChanged(response)
             }
@@ -775,9 +765,6 @@ extension IMManager: LTIMManagerDelegate {
     //MARK: Message
     func ltimManagerIncomingSendMessage(_ response: LTSendMessageResponse?, receiver: String) {
         DispatchQueue.main.async {
-            if response?.chID != self.currentChannel?.chID {
-                return
-            }
             for delegate in self.delegateArray {
                 delegate.onIncomingMessage(response)
             }
@@ -786,9 +773,6 @@ extension IMManager: LTIMManagerDelegate {
 
     func ltimManagerIncomingDeleteMessages(_ response: LTDeleteMessagesResponse?, receiver: String) {
         DispatchQueue.main.async {
-            if response?.chID != self.currentChannel?.chID {
-                return
-            }
             for delegate in self.delegateArray {
                 delegate.onNeedQueryMessage()
             }
@@ -797,9 +781,6 @@ extension IMManager: LTIMManagerDelegate {
 
     func ltimManagerIncomingRecall(_ response: LTRecallResponse?, receiver: String) {
         DispatchQueue.main.async {
-            if response?.chID != self.currentChannel?.chID {
-                return
-            }
             for delegate in self.delegateArray {
                 delegate.onNeedQueryMessage()
             }

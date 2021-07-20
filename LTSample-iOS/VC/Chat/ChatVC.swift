@@ -63,8 +63,6 @@ class ChatVC: MessagesViewController {
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
-        IMManager.shared.currentChannel = chatNavigation.channel
-        
         messagesCollectionView = MessagesCollectionView(frame: .zero, collectionViewLayout: CustomMessagesFlowLayout())
         messagesCollectionView.backgroundColor = .clear
         messagesCollectionView.register(CustomCell.self)
@@ -533,15 +531,17 @@ extension ChatVC: CameraInputBarAccessoryViewDelegate {
         // Resign first responder for iPad split view
         inputBar.inputTextView.resignFirstResponder()
         
-        IMManager.shared.sendTextMessage(text) { success in
-            inputBar.sendButton.stopAnimating()
-            inputBar.inputTextView.placeholder = "Aa"
-            if success {
-                DispatchQueue.main.async {
-                    self.messagesCollectionView.scrollToBottom(true)
+        if let channel = chatNavigation.channel {
+            IMManager.shared.sendTextMessage(chID: channel.chID, chType: channel.chType, text: text) { success in
+                inputBar.sendButton.stopAnimating()
+                inputBar.inputTextView.placeholder = "Aa"
+                if success {
+                    DispatchQueue.main.async {
+                        self.messagesCollectionView.scrollToBottom(true)
+                    }
+                } else {
+                    AppUtility.alert("Send text message failed.")
                 }
-            } else {
-                AppUtility.alert("Send text message failed.")
             }
         }
     }
@@ -556,15 +556,17 @@ extension ChatVC: CameraInputBarAccessoryViewDelegate {
         for item in attachments {
             if case .image(let image) = item {
                 group.enter()
-                IMManager.shared.sendImageMessage(image) {
-                    if $0 {
-                        DispatchQueue.main.async {
-                            self.messagesCollectionView.scrollToBottom(true)
+                if let channel = chatNavigation.channel {
+                    IMManager.shared.sendImageMessage(chID: channel.chID, chType: channel.chType, image: image) {
+                        if $0 {
+                            DispatchQueue.main.async {
+                                self.messagesCollectionView.scrollToBottom(true)
+                            }
+                        } else {
+                            isAllSuccess = false
                         }
-                    } else {
-                        isAllSuccess = false
+                        group.leave()
                     }
-                    group.leave()
                 }
             }
         }
