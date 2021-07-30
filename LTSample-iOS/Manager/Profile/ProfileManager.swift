@@ -118,6 +118,11 @@ class ProfileManager: DelegatesObject {
     }
     
     func updateAvatar(_ fileID: String, fileInfo: LTFileInfo) {
+        guard fileInfo.isExist else {
+            self.deleteAvatar(fileID, fileInfo: fileInfo)
+            return
+        }
+        
         let storePath = FileManager.default.getCachePath() + "temp_" + fileInfo.fileName
                 
         let action = LTStorageAction.createDownloadFileAction(with: fileInfo, storePath: storePath)
@@ -126,6 +131,22 @@ class ProfileManager: DelegatesObject {
         
         downloadAvatarDict[storePath] = fileID
         DownloadManager.shared.execute(actions: [action])
+    }
+    
+    func deleteAvatar(_ fileID: String, fileInfo: LTFileInfo) {
+
+        let storePath = FileManager.default.getCachePath() + fileInfo.fileName
+        
+        guard !fileInfo.isExist, FileManager.default.fileExists(atPath: storePath) else { return }
+                
+        FileManager.default.removeFile(path: storePath)
+        UserInfo.saveLastUserUpdateTime(fileID, updateTime:updateTime)
+
+        for delegate in self.delegateArray {
+            if let profileManagerDelagate = delegate as? ProfileManagerDelagate {
+                profileManagerDelagate.profileUpdate(userIDs: [fileID])
+            }
+        }
     }
 
 }

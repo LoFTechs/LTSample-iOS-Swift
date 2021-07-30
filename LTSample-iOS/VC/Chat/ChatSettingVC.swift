@@ -300,7 +300,8 @@ extension ChatSettingVC: UIScrollViewDelegate {
 extension ChatSettingVC: EditAvatarProtocol {
     func deleteHandler() {
         guard let channel = chatNavigation.channel, channel.chType != .single else { return }
-        IMManager.shared.setChannelAvatar(chID: channel.chID, avatar: nil) { success in
+        
+        IMManager.shared.deleteChannelAvatar(chID: channel.chID, fileInfo: channel.profileImageFileInfo) { success in
             if success {
                 DispatchQueue.main.async {
                     IMManager.shared.queryChannel(chID: channel.chID)

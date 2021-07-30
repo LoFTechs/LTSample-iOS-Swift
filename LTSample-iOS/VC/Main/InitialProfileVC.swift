@@ -110,9 +110,11 @@ class InitialProfileVC: LTVC {
     private func setProfile() {
         loading("Setting up ...", true)
         
-        if selectedAvatar != nil || isSelectDeleteAvatar {
+        if selectedAvatar != nil {
             setAvatarSuccess = false
             IMManager.shared.setMyAvatar(selectedAvatar)
+        } else if isSelectDeleteAvatar {
+            IMManager.shared.deleteMyAvatar()
         }
         
         if tfNickname.text!.count > 0 && tfNickname.text != UserInfo.nickname {

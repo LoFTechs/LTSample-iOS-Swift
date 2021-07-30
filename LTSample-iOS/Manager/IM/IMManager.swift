@@ -149,16 +149,12 @@ class IMManager: NSObject {
         
         let filePath = FileManager.default.getCachePath().appending("\(UserInfo.userID).jpg")
         do {
-            var isDelete = false
             if let theAvatar = avatar, let data = theAvatar.jpegData(compressionQuality: 0.5) {
                 try data.write(to: URL(fileURLWithPath: filePath), options: .atomic)
             } else {
-                isDelete = true
-                if FileManager.default.fileExists(atPath: filePath) {
-                    try FileManager.default.removeItem(atPath: filePath)
-                }
+                return
             }
-            getCurrentLTIMMnager()?.userHelper.setUserAvatarWithTransID(UUID().uuidString, filePath: isDelete ? "" : filePath, completion: { (response, error) in
+            getCurrentLTIMMnager()?.userHelper.setUserAvatarWithTransID(UUID().uuidString, filePath: filePath, completion: { (response, error) in
                 DispatchQueue.main.async {
                     if let err = error {
                         print("Set My Avatar fail: " + err.errorMessage)
@@ -184,6 +180,55 @@ class IMManager: NSObject {
                 delegate.onSetMyAvatar(nil)
             }
         }
+    }
+    
+    func deleteMyAvatar() {
+        guard let userID = currentUser?.userID, let manager = IMManager.shared.getCurrentLTIMMnager() else { return }
+        
+        let userIDs = [userID];
+        
+        manager.userHelper.queryUserProfile(withTransID: UUID().uuidString, userIDs: userIDs, phoneNumbers: nil, completion: { (userProfileResponse, errorInfo) in
+            DispatchQueue.main.async {
+                if let response = userProfileResponse, response.result.count > 0 {
+                    for profile in response.result {
+                        
+                        if profile.userID.count > 0 && profile.profileImageFileInfo.isExist {
+                            
+                            manager.userHelper.deleteUserAvatar(withTransID: UUID().uuidString, fileInfo: profile.profileImageFileInfo) { (response, error) in
+                                DispatchQueue.main.async {
+                                    if let err = error {
+                                        print("Delete My Avatar fail: " + err.errorMessage)
+                                    } else {
+                                        print("Delete My Avatar success!")
+                                        let filePath = FileManager.default.getCachePath().appending(profile.profileImageFileInfo.fileName)
+                                        do {
+                                            if FileManager.default.fileExists(atPath: filePath) {
+                                                try FileManager.default.removeItem(atPath: filePath)
+                                            }
+                                        } catch {
+                                            print(error)
+                                        }
+                                        UserInfo.saveLastUserUpdateTime(UserInfo.userID, updateTime: Date().timeIntervalSince1970)
+                                    }
+                                    
+                                    for delegate in self.delegateArray {
+                                        delegate.onSetMyAvatar(response?.userProfile)
+                                    }
+                                }
+                            }
+                        } else {
+                            for delegate in self.delegateArray {
+                                delegate.onSetMyAvatar(nil)
+                            }
+                        }
+                    }
+                } else {
+                    for delegate in self.delegateArray {
+                        delegate.onSetMyAvatar(nil)
+                    }
+                }
+            }
+        })
     }
     
     func setApnsMute(_ mute: Bool) {
@@ -282,18 +327,15 @@ class IMManager: NSObject {
     
     func setChannelAvatar(chID: String, avatar: UIImage?, completion: ((Bool) ->Void)? = nil) {
         let avatarPath = FileManager.default.getCachePath().appending("\(chID).jpg")
-        var isDelete = false
+
         do {
             if let theAvatar = avatar, let data = theAvatar.jpegData(compressionQuality: 0.5) {
                 try data.write(to: URL(fileURLWithPath: avatarPath), options: .atomic)
             } else {
-                isDelete = true
-                if FileManager.default.fileExists(atPath: avatarPath) {
-                    try FileManager.default.removeItem(atPath: avatarPath)
-                }
+                return
             }
             
-            getCurrentLTIMMnager()?.channelHelper.setChannelAvatarWithTransID(UUID().uuidString, chID: chID, avatarPath: isDelete ? "" : avatarPath, completion: { (response, error) in
+            getCurrentLTIMMnager()?.channelHelper.setChannelAvatarWithTransID(UUID().uuidString, chID: chID, avatarPath: avatarPath, completion: { (response, error) in
                 if let err = error {
                     print("Set group chat avatar fail: " + err.errorMessage)
                     completion?(false)
@@ -324,6 +366,32 @@ class IMManager: NSObject {
             for delegate in self.delegateArray {
                 delegate.onChangeChannelProfile(response)
             }
+        })
+    }
+    
+    func deleteChannelAvatar(chID: String,  fileInfo: LTFileInfo, completion: ((Bool) ->Void)? = nil) {
+        getCurrentLTIMMnager()?.channelHelper.deleteChannelAvatar(withTransID: UUID().uuidString, chID: chID, fileInfo: fileInfo, completion: { (response, error) in
+            DispatchQueue.main.async {
+                if let err = error {
+                    print("Delete group chat avatar fail: " + err.errorMessage)
+                    completion?(false)
+                    
+                } else {
+                    print("Delete group chat avatar success")
+                    
+                    do {
+                        let avatarPath = FileManager.default.getCachePath().appending("\(chID).jpg")
+                        if FileManager.default.fileExists(atPath: avatarPath) {
+                            try FileManager.default.removeItem(atPath: avatarPath)
+                        }
+                    } catch {
+                        print(error)
+                    }
+                    
+                    completion?(true)
+                }
+            }
+
         })
     }
     
@@ -797,9 +865,11 @@ extension IMManager: LTIMManagerDelegate {
     }
     
     func ltimManagerIncomingModifyUserProfile(_ response: LTModifyUserProfileResponse?, receiver: String) {
+        DispatchQueue.main.async {
             for delegate in self.delegateArray {
                 delegate.onIncomingModifyUserProfile(response)
             }
+        }
     }
     
 }
