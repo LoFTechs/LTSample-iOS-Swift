@@ -108,29 +108,40 @@ extension SettingVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        if indexPath.section == 0 {
+        
+        switch (indexPath.section, indexPath.row) {
+        case (0, _):
             performSegue(withIdentifier: "goInitialProfileFromSetting", sender: nil)
-        } else if indexPath.section == 1 {
+        case (1, _):
             loading("Setting up ...")
-            if indexPath.row == 0 {
-                switchMute.isOn.toggle()
-                IMManager.shared.setApnsMute(!UserInfo.notificationMute)
-            } else if indexPath.row == 1 {
-                settingContent = true
-                switchContent.isOn.toggle()
-                IMManager.shared.setApnsDisplaySender(!UserInfo.notificationDisplay, displayContent: UserInfo.notificationContent)
-            } else if indexPath.row == 2 {
-                settingContent = false
-                switchDisplay.isOn.toggle()
-                IMManager.shared.setApnsDisplaySender(UserInfo.notificationDisplay, displayContent: !UserInfo.notificationContent)
-            }
-        } else if indexPath.section == 2 {
+            fallthrough
+        case (1,0):
+            switchMute.isOn.toggle()
+            IMManager.shared.setApnsMute(!UserInfo.notificationMute)
+        case (1,1):
+            settingContent = true
+            switchContent.isOn.toggle()
+            IMManager.shared.setApnsDisplaySender(!UserInfo.notificationDisplay, displayContent: UserInfo.notificationContent)
+        case (1,2):
+            settingContent = false
+            switchDisplay.isOn.toggle()
+            IMManager.shared.setApnsDisplaySender(UserInfo.notificationDisplay, displayContent: !UserInfo.notificationContent)
+        case (2,0):
             let alert = UIAlertController(title: "Are you sure you want to log out?", message: nil, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { _ in
                 SDKManager.shared.logout()
             })
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
             present(alert, animated: true, completion: nil)
+        case (2,1):
+            let alert = UIAlertController(title: "Are you sure you want to delete account?", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .destructive) { _ in
+                SDKManager.shared.deleteAccount()
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            present(alert, animated: true, completion: nil)
+            break
+        case (_, _):break
         }
     }
 }
@@ -153,15 +164,12 @@ extension SettingVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if section == 0 {
-            return 1
-        } else if section == 1 {
-            return 3
-        } else if section == 2 {
-            return 1
+        switch section {
+        case 0: return 1
+        case 1: return 3
+        case 2: return 2
+        default: return 0
         }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -186,20 +194,23 @@ extension SettingVC: UITableViewDataSource {
         cell.textLabel?.numberOfLines = 1
         cell.textLabel?.font = .systemFont(ofSize: 18)
         
-        if indexPath.section == 1 {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = "Show notification"
-                cell.accessoryView = switchMute
-            } else if indexPath.row == 1 {
-                cell.textLabel?.text = "Show notification content"
-                cell.accessoryView = switchContent
-            } else if indexPath.row == 2 {
-                cell.textLabel?.text = "Show notification sender"
-                cell.accessoryView = switchDisplay
-            }
-        } else if indexPath.section == 2 {
+        switch (indexPath.section, indexPath.row) {
+        case (1,0):
+            cell.textLabel?.text = "Show notification"
+            cell.accessoryView = switchMute
+        case (1,1):
+            cell.textLabel?.text = "Show notification content"
+            cell.accessoryView = switchContent
+        case (1,2):
+            cell.textLabel?.text = "Show notification sender"
+            cell.accessoryView = switchDisplay
+        case (2,0):
             cell.textLabel?.text = "Log out"
             cell.textLabel?.textColor = .systemRed
+        case (2,1):
+            cell.textLabel?.text = "Delete my account"
+            cell.textLabel?.textColor = .systemRed
+        case (_, _):break
         }
         return cell
     }

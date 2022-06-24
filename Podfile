@@ -6,9 +6,9 @@ target 'LTSample-iOS' do
   use_frameworks!
 
   # Pods for LTSample-iOS
-	pod 'MessageKit'
-	pod 'Kingfisher', '~> 6.0'
-	pod 'LTSDK', '5.2.5'
-	pod 'LTCallSDK', '5.2.5'
-	pod 'LTIMSDK', '5.2.5'
+	pod 'MessageKit', '3.6.0'
+ 	pod 'Kingfisher'
+	pod 'LTSDK', '5.2.6'
+	pod 'LTCallSDK', '5.2.6'
+	pod 'LTIMSDK', '5.2.6'
 end

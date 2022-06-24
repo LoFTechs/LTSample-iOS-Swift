@@ -9,7 +9,7 @@ import Foundation
 
 extension LTFileInfo {
     func getStoragePath() -> String {
-        return FileManager.default.getCachePath() + self.fileName
+        return FileManager.default.getCachePath() + (self.fileName ?? "")
     }
     
     func createDownloadFileAction() -> LTStorageAction {

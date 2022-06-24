@@ -98,7 +98,7 @@ class IMManager: NSObject {
             return
         }
         
-        getCurrentLTIMMnager()?.userHelper.queryUserProfile(withTransID: UUID().uuidString, userIDs: [userID], phoneNumbers: nil, completion: { (response, error) in
+        getCurrentLTIMMnager()?.userHelper?.queryUserProfile(withTransID: UUID().uuidString, userIDs: [userID], phoneNumbers: nil, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Query my UserProfile fail: " + err.errorMessage)
@@ -116,7 +116,7 @@ class IMManager: NSObject {
             return
         }
         
-        getCurrentLTIMMnager()?.userHelper.queryDeviceNotify(withTransID: UUID().uuidString, completion: { (response, error) in
+        getCurrentLTIMMnager()?.userHelper?.queryDeviceNotify(withTransID: UUID().uuidString, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Query My Apns Setting fail: " + err.errorMessage)
@@ -130,7 +130,7 @@ class IMManager: NSObject {
     }
     
     func setMyNickname(_ nickname: String) {
-        getCurrentLTIMMnager()?.userHelper.setUserNicknameWithTransID(UUID().uuidString, nickname: nickname, completion: { (response, error) in
+        getCurrentLTIMMnager()?.userHelper?.setUserNicknameWithTransID(UUID().uuidString, nickname: nickname, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set nickname fail: " + err.errorMessage)
@@ -154,7 +154,7 @@ class IMManager: NSObject {
             } else {
                 return
             }
-            getCurrentLTIMMnager()?.userHelper.setUserAvatarWithTransID(UUID().uuidString, filePath: filePath, completion: { (response, error) in
+            getCurrentLTIMMnager()?.userHelper?.setUserAvatarWithTransID(UUID().uuidString, filePath: filePath, completion: { (response, error) in
                 DispatchQueue.main.async {
                     if let err = error {
                         print("Set My Avatar fail: " + err.errorMessage)
@@ -187,20 +187,20 @@ class IMManager: NSObject {
         
         let userIDs = [userID];
         
-        manager.userHelper.queryUserProfile(withTransID: UUID().uuidString, userIDs: userIDs, phoneNumbers: nil, completion: { (userProfileResponse, errorInfo) in
+        manager.userHelper?.queryUserProfile(withTransID: UUID().uuidString, userIDs: userIDs, phoneNumbers: nil, completion: { (userProfileResponse, errorInfo) in
             DispatchQueue.main.async {
                 if let response = userProfileResponse, response.result.count > 0 {
                     for profile in response.result {
                         
                         if profile.userID.count > 0 && profile.profileImageFileInfo.isExist {
                             
-                            manager.userHelper.deleteUserAvatar(withTransID: UUID().uuidString, fileInfo: profile.profileImageFileInfo) { (response, error) in
+                            manager.userHelper?.deleteUserAvatar(withTransID: UUID().uuidString, fileInfo: profile.profileImageFileInfo) { (response, error) in
                                 DispatchQueue.main.async {
                                     if let err = error {
                                         print("Delete My Avatar fail: " + err.errorMessage)
                                     } else {
                                         print("Delete My Avatar success!")
-                                        let filePath = FileManager.default.getCachePath().appending(profile.profileImageFileInfo.fileName)
+                                        let filePath = FileManager.default.getCachePath().appending(profile.profileImageFileInfo.fileName ?? "")
                                         do {
                                             if FileManager.default.fileExists(atPath: filePath) {
                                                 try FileManager.default.removeItem(atPath: filePath)
@@ -232,7 +232,7 @@ class IMManager: NSObject {
     }
     
     func setApnsMute(_ mute: Bool) {
-        getCurrentLTIMMnager()?.userHelper.setUserDeviceMuteWithTransID(UUID().uuidString, muteAll: mute, time: nil, completion: { (response, error) in
+        getCurrentLTIMMnager()?.userHelper?.setUserDeviceMuteWithTransID(UUID().uuidString, muteAll: mute, time: nil, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set apns mute fail: " + err.errorMessage)
@@ -248,7 +248,7 @@ class IMManager: NSObject {
     }
     
     func setApnsDisplaySender(_ displaySender: Bool, displayContent: Bool) {
-        getCurrentLTIMMnager()?.userHelper.setUserDeviceNotifyPreviewWithTransID(UUID().uuidString, hidingSender: !displaySender, hidingContent: !displayContent, completion: { (response, error) in
+        getCurrentLTIMMnager()?.userHelper?.setUserDeviceNotifyPreviewWithTransID(UUID().uuidString, hidingSender: !displaySender, hidingContent: !displayContent, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set apns display fail: " + err.errorMessage)
@@ -268,7 +268,7 @@ class IMManager: NSObject {
         var result = [LTChannelResponse]()
         var isFailed = false
         let chTypes: Set<NSNumber> = [NSNumber(integerLiteral: LTChannelType.group.rawValue), NSNumber(integerLiteral: LTChannelType.single.rawValue)]
-        getCurrentLTIMMnager()?.channelHelper.queryChannel(withTransID: UUID().uuidString, chTypes: chTypes, batchCount: 30, withMembers: false, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.queryChannel(withTransID: UUID().uuidString, chTypes: chTypes, batchCount: 30, withMembers: false, completion: { (response, error) in
             if isFailed {
                 return
             }
@@ -310,7 +310,7 @@ class IMManager: NSObject {
     }
     
     func queryChannel(chID: String) {
-        getCurrentLTIMMnager()?.channelHelper.queryChannel(withTransID: UUID().uuidString, chID: chID, withMembers: false, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.queryChannel(withTransID: UUID().uuidString, chID: chID, withMembers: false, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Query current chat fail: " + err.errorMessage)
@@ -335,7 +335,7 @@ class IMManager: NSObject {
                 return
             }
             
-            getCurrentLTIMMnager()?.channelHelper.setChannelAvatarWithTransID(UUID().uuidString, chID: chID, avatarPath: avatarPath, completion: { (response, error) in
+            getCurrentLTIMMnager()?.channelHelper?.setChannelAvatarWithTransID(UUID().uuidString, chID: chID, avatarPath: avatarPath, completion: { (response, error) in
                 if let err = error {
                     print("Set group chat avatar fail: " + err.errorMessage)
                     completion?(false)
@@ -350,7 +350,7 @@ class IMManager: NSObject {
     }
     
     func setChannelSubject(chID: String, subject: String?, completion: ((Bool) ->Void)? = nil) {
-        getCurrentLTIMMnager()?.channelHelper.setChannelSubjectWithTransID(UUID().uuidString, chID: chID, subject: subject,completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.setChannelSubjectWithTransID(UUID().uuidString, chID: chID, subject: subject,completion: { (response, error) in
             if let err = error {
                 print("Set group chat subject fail: " + err.errorMessage)
                 completion?(false)
@@ -370,7 +370,7 @@ class IMManager: NSObject {
     }
     
     func deleteChannelAvatar(chID: String,  fileInfo: LTFileInfo, completion: ((Bool) ->Void)? = nil) {
-        getCurrentLTIMMnager()?.channelHelper.deleteChannelAvatar(withTransID: UUID().uuidString, chID: chID, fileInfo: fileInfo, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.deleteChannelAvatar(withTransID: UUID().uuidString, chID: chID, fileInfo: fileInfo, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Delete group chat avatar fail: " + err.errorMessage)
@@ -396,7 +396,7 @@ class IMManager: NSObject {
     }
     
     func setMyChannelNickname(chID: String,  nickname: String) {
-        getCurrentLTIMMnager()?.channelHelper.setChannelUserNicknameWithTransID(UUID().uuidString, chID: chID, nickname: nickname, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.setChannelUserNicknameWithTransID(UUID().uuidString, chID: chID, nickname: nickname, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set my chNickname fail: " + err.errorMessage)
@@ -416,7 +416,7 @@ class IMManager: NSObject {
     }
     
     func setChannelMute(chID: String, mute: Bool, completion: ((Bool) ->Void)? = nil) {
-        getCurrentLTIMMnager()?.channelHelper.setChannelMuteWithTransID(UUID().uuidString, chID: chID, isMute: mute, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.setChannelMuteWithTransID(UUID().uuidString, chID: chID, isMute: mute, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set mute fail: " + err.errorMessage)
@@ -438,7 +438,7 @@ class IMManager: NSObject {
     }
     
     func dismissChannel(chID: String) {
-        getCurrentLTIMMnager()?.channelHelper.dismissChannel(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.dismissChannel(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Dismiss fail: " + err.errorMessage)
@@ -450,7 +450,7 @@ class IMManager: NSObject {
     }
     
     func leaveChannel(chID: String) {
-        getCurrentLTIMMnager()?.channelHelper.leaveChannel(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.leaveChannel(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Leave fail: " + err.errorMessage)
@@ -462,7 +462,7 @@ class IMManager: NSObject {
     }
     
     func deleteChannelMessages(chID: String) {
-        getCurrentLTIMMnager()?.messageHelper.deleteChannelMessages(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.deleteChannelMessages(withTransID: UUID().uuidString, chID: chID, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Dismiss fail: " + err.errorMessage)
@@ -476,7 +476,7 @@ class IMManager: NSObject {
     //MARK: - Message
     //MARK: - Query Message
     func queryMessages(chID: String, markTS: Int64) {
-        getCurrentLTIMMnager()?.messageHelper.queryMessage(withTransID: UUID().uuidString, chID: chID, markTS: markTS, afterN: -20, completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.queryMessage(withTransID: UUID().uuidString, chID: chID, markTS: markTS, afterN: -20, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Leave fail: " + err.errorMessage)
@@ -539,7 +539,7 @@ class IMManager: NSObject {
         message.chID = chID
         message.chType = chType
         message.transID = UUID().uuidString
-        getCurrentLTIMMnager()?.messageHelper.send(message, completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.send(message, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Send fail: " + err.errorMessage)
@@ -554,7 +554,7 @@ class IMManager: NSObject {
     
     //MARK - Delete Message
     func deleteMessage(_ msgID: String) {
-        getCurrentLTIMMnager()?.messageHelper.deleteMessages(withTransID: UUID().uuidString, msgIDs: [msgID], completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.deleteMessages(withTransID: UUID().uuidString, msgIDs: [msgID], completion: { (response, error) in
             DispatchQueue.main.async { [self] in
                 if let err = error {
                     print("Send fail: " + err.errorMessage)
@@ -574,7 +574,7 @@ class IMManager: NSObject {
     }
     
     func recallMessage(_ msgID: String) {
-        getCurrentLTIMMnager()?.messageHelper.recallMessage(withTransID: UUID().uuidString, msgIDs: [msgID], silentMode: false, completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.recallMessage(withTransID: UUID().uuidString, msgIDs: [msgID], silentMode: false, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Recall message fail: " + err.errorMessage)
@@ -587,7 +587,7 @@ class IMManager: NSObject {
     
     //MARK - Channel Member
     func queryChannelMember(chID: String, lastUserID: String, count: Int) {
-        getCurrentLTIMMnager()?.channelHelper.queryChannelMembers(withTransID: UUID().uuidString, chID: chID, lastUserID: lastUserID, count: UInt(count), completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.queryChannelMembers(withTransID: UUID().uuidString, chID: chID, lastUserID: lastUserID, count: UInt(count), completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Query Channel Member fail: " + err.errorMessage)
@@ -601,7 +601,7 @@ class IMManager: NSObject {
     }
     
     func setMemberRole(chID: String, userID: String, roleID: LTChannelRole) {
-        getCurrentLTIMMnager()?.channelHelper.setMemberRoleWithTransID(UUID().uuidString, chID: chID, userID: userID, roleID: roleID, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.setMemberRoleWithTransID(UUID().uuidString, chID: chID, userID: userID, roleID: roleID, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Set member role fail: " + err.errorMessage)
@@ -621,7 +621,7 @@ class IMManager: NSObject {
         member.userID = userID
         let members: Set<LTMemberModel> = [member]
         
-        getCurrentLTIMMnager()?.channelHelper.kickMembers(withTransID: UUID().uuidString, chID: chID, members: members, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.kickMembers(withTransID: UUID().uuidString, chID: chID, members: members, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Kick member fail: " + err.errorMessage)
@@ -645,7 +645,7 @@ class IMManager: NSObject {
         }
 
         let chID = UUID().uuidString
-        getCurrentLTIMMnager()?.channelHelper.createGroupChannel(withTransID: UUID().uuidString, chID: chID, channelSubject: subject, members: set, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.createGroupChannel(withTransID: UUID().uuidString, chID: chID, channelSubject: subject, members: set, completion: { (response, error) in
             DispatchQueue.main.async { [self] in
                 if let err = error {
                     print("Create group chat fail: " + err.errorMessage)
@@ -665,7 +665,7 @@ class IMManager: NSObject {
     func inviteChannelMember(chID: String, members: [LTMemberModel]) {
         let set = Set(members)
         
-        getCurrentLTIMMnager()?.channelHelper.inviteMembers(withTransID: UUID().uuidString, chID: chID, members: set, joinMethod: .normal, completion: { (response, error) in
+        getCurrentLTIMMnager()?.channelHelper?.inviteMembers(withTransID: UUID().uuidString, chID: chID, members: set, joinMethod: .normal, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("Invite members fail: " + err.errorMessage)
@@ -681,7 +681,7 @@ class IMManager: NSObject {
     }
     
     func markRead(chID: String, markTS: Int64, completion: ((Bool) ->Void)? = nil) {
-        getCurrentLTIMMnager()?.messageHelper.markRead(withTransID: UUID().uuidString, chID: chID, markTS: markTS, completion: { (response, error) in
+        getCurrentLTIMMnager()?.messageHelper?.markRead(withTransID: UUID().uuidString, chID: chID, markTS: markTS, completion: { (response, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     print("MarkRead fail: " + err.errorMessage)

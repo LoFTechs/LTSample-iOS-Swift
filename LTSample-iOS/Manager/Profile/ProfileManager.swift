@@ -80,7 +80,7 @@ class ProfileManager: DelegatesObject {
         
         isExecuteQuery = true
         
-        manager.userHelper.queryUserProfile(withTransID: UUID().uuidString, userIDs: userIDs, phoneNumbers: nil, completion: { (userProfileResponse, errorInfo) in
+        manager.userHelper?.queryUserProfile(withTransID: UUID().uuidString, userIDs: userIDs, phoneNumbers: nil, completion: { (userProfileResponse, errorInfo) in
             DispatchQueue.main.async {
                 if let response = userProfileResponse, response.result.count > 0 {
                     for profile in response.result {
@@ -123,7 +123,7 @@ class ProfileManager: DelegatesObject {
             return
         }
         
-        let storePath = FileManager.default.getCachePath() + "temp_" + fileInfo.fileName
+        let storePath = FileManager.default.getCachePath() + "temp_" + (fileInfo.fileName ?? "")
                 
         let action = LTStorageAction.createDownloadFileAction(with: fileInfo, storePath: storePath)
         
@@ -135,7 +135,7 @@ class ProfileManager: DelegatesObject {
     
     func deleteAvatar(_ fileID: String, fileInfo: LTFileInfo) {
 
-        let storePath = FileManager.default.getCachePath() + fileInfo.fileName
+        let storePath = FileManager.default.getCachePath() + (fileInfo.fileName ?? "")
         
         guard !fileInfo.isExist, FileManager.default.fileExists(atPath: storePath) else { return }
                 
@@ -161,14 +161,14 @@ extension ProfileManager: DownloadManagerDelegate {
     
     func downloadDidFinished(acitons: [LTStorageAction]) {
         for aciton in acitons {
-            if let userID = downloadAvatarDict[aciton.storePath] {
+            if let storePath = aciton.storePath, let userID = downloadAvatarDict[storePath] {
                 UserInfo.saveLastUserUpdateTime(userID, updateTime: updateTime)
-                downloadAvatarDict.removeValue(forKey: aciton.storePath)
+                downloadAvatarDict.removeValue(forKey: storePath)
                 
                 let storePath = FileManager.default.getCachePath() + aciton.fileName
                 FileManager.default.removeFile(path: storePath)
-                FileManager.default.moveFile(atPath: aciton.storePath, toPath: storePath)
-                FileManager.default.removeFile(path: aciton.storePath)
+                FileManager.default.moveFile(atPath: storePath, toPath: storePath)
+                FileManager.default.removeFile(path: storePath)
 
                 for delegate in self.delegateArray {
                     if let profileManagerDelagate = delegate as? ProfileManagerDelagate {
@@ -181,10 +181,10 @@ extension ProfileManager: DownloadManagerDelegate {
     
     func downloadDidFailed(acitons: [LTStorageAction]) {
         for aciton in acitons {
-            if let userID = downloadAvatarDict[aciton.storePath] {
+            if let storePath = aciton.storePath, let userID = downloadAvatarDict[storePath] {
                 UserInfo.saveLastUserUpdateTime(userID, updateTime: retryTime )
-                FileManager.default.removeFile(path: aciton.storePath)
-                downloadAvatarDict.removeValue(forKey: aciton.storePath)
+                FileManager.default.removeFile(path: storePath)
+                downloadAvatarDict.removeValue(forKey: storePath)
             }
         }
     }

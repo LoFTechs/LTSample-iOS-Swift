@@ -47,19 +47,33 @@ class FriendManager {
             DispatchQueue.main.async {
                 if response.returnCode == .success {
                     
-                    if let userStatus = userStatuses?.first, userStatus.userID.count > 0, userStatus.canIM {
+                    var userID = ""
+                    
+                    userStatuses?.forEach({ userStatuses in
+                        if userStatuses.userID.count > 0, userStatuses.canIM {
+                            if userStatuses.brandID == Config.brandID {
+                                userID = userStatuses.userID;
+                                return
+                            } else if userID.count == 0 {
+                                userID = userStatuses.userID;
+                            }
+                        }
+                    })
+                    
+                    if userID.count > 0 {
                         
-                        self.createFriendShip(userID: userStatus.userID)
+                        self.createFriendShip(userID: userID)
                         
                     } else {
                         for delegate in self.delegateArray {
                             delegate.friendManagerSearchFriendFail("User not exist.")
                         }
                     }
+                    
                 } else {
                     
                     for delegate in self.delegateArray {
-                        delegate.friendManagerSearchFriendFail(response.returnMessage)
+                        delegate.friendManagerSearchFriendFail(response.returnMessage ?? "")
                     }
                 }
             }
@@ -87,7 +101,7 @@ class FriendManager {
         }
         let member = LTMemberModel()
         member.userID = userID
-        manager.channelHelper.createSingleChannel(withTransID: UUID().uuidString, member: member, completion: { (respone, error) in
+        manager.channelHelper?.createSingleChannel(withTransID: UUID().uuidString, member: member, completion: { (respone, error) in
             DispatchQueue.main.async {
                 if let err = error {
                     for delegate in self.delegateArray {
@@ -135,7 +149,7 @@ extension FriendManager: IMManagerDelegate {
             
             let friend = Friend(userID: userID)
             friends.append(friend)
-            ProfileManager.shared.updateProfileInfo(userID: userID)
+            ProfileManager.shared.updateProfileInfo(userID: userID, rightnow: true)
         }
         
         friends.sort{ $0.userID < $1.userID }

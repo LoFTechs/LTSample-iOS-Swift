@@ -145,6 +145,22 @@ class SDKManager {
         delegate.changeLoginVC()
     }
     
+    func deleteAccount() {
+        LTSDK.deletePrimaryUser {[self] response in
+            DispatchQueue.main.async {
+                if response.returnCode == .success {
+                    FileManager.default.removeCachePath()
+                    UserInfo.delete()
+                    let delegate = UIApplication.shared.delegate as! AppDelegate
+                    delegate.resetApp()
+                    delegate.changeLoginVC()
+                } else {
+                    print(response.returnMessage ?? "")
+                }
+            }
+        }
+    }
+    
     private func returnAction(_ returnCode: ReturnCode, completion: ((ReturnCode) ->Void)?) {
         if returnCode == .success {
             initSDK { (success) in

@@ -237,7 +237,7 @@ extension ChatListVC: ProfileManagerDelagate {
 
 extension ChatListVC: CreateNCDelegate {
     func createNC(_ createNC: CreateNavigationController, selectedFriend friend: Friend, profile: (UIImage?, String?, UIView.ContentMode)) {
-        if let chID = IMManager.shared.getCurrentLTIMMnager()?.channelHelper.getSingleChannelID(withUserID: friend.userID) {
+        if let chID = IMManager.shared.getCurrentLTIMMnager()?.channelHelper?.getSingleChannelID(withUserID: friend.userID) {
             push(chID: chID, profile: profile)
         }
     }
