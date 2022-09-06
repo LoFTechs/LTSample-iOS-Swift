@@ -67,7 +67,7 @@ class DownloadManager: DelegatesObject {
         isExecute = true
         manager.execute(withAcitons: actions) { (response, storageResult) in
             DispatchQueue.main.async {//TODO: 一筆失敗全部都會失敗
-                if let results = storageResult {
+                if response.returnCode == .success, let results = storageResult {
                     let array = self.acitons.filter { action -> Bool in
                         return results.contains { return $0.actionID == action.actionID}
                     }

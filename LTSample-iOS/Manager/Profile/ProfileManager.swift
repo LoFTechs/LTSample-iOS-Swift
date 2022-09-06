@@ -161,14 +161,14 @@ extension ProfileManager: DownloadManagerDelegate {
     
     func downloadDidFinished(acitons: [LTStorageAction]) {
         for aciton in acitons {
-            if let storePath = aciton.storePath, let userID = downloadAvatarDict[storePath] {
+            if let tempStorePath = aciton.storePath, let userID = downloadAvatarDict[tempStorePath] {
                 UserInfo.saveLastUserUpdateTime(userID, updateTime: updateTime)
-                downloadAvatarDict.removeValue(forKey: storePath)
+                downloadAvatarDict.removeValue(forKey: tempStorePath)
                 
                 let storePath = FileManager.default.getCachePath() + aciton.fileName
                 FileManager.default.removeFile(path: storePath)
-                FileManager.default.moveFile(atPath: storePath, toPath: storePath)
-                FileManager.default.removeFile(path: storePath)
+                FileManager.default.moveFile(atPath: tempStorePath, toPath: storePath)
+                FileManager.default.removeFile(path: tempStorePath)
 
                 for delegate in self.delegateArray {
                     if let profileManagerDelagate = delegate as? ProfileManagerDelagate {
