@@ -7,8 +7,8 @@ target 'LTSample-iOS' do
 
   # Pods for LTSample-iOS
 	pod 'MessageKit', '3.6.0'
- 	pod 'Kingfisher'
-	pod 'LTSDK', '5.2.9'
-	pod 'LTCallSDK', '5.2.9'
-	pod 'LTIMSDK', '5.2.9'
+ 	pod 'Kingfisher', '7.9.1'
+	pod 'LTSDK', '5.3.0'
+	pod 'LTCallSDK', '5.3.0'
+	pod 'LTIMSDK', '5.3.0'
 end
